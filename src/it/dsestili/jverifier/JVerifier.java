@@ -39,20 +39,20 @@ public class JVerifier
 		{
 			FileInputStream fis = new FileInputStream(file);
 			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
+			BufferedReader reader = new BufferedReader(isr);
 			
 			int okCount = 0, doesNotMatchCount = 0;
 			
 			String lineOfText;
-			while((lineOfText = br.readLine()) != null)
+			while((lineOfText = reader.readLine()) != null)
 			{
 				/* Versione 1 
 				lineOfText = lineOfText.replace("*", " ");
 				String[] lineSplit = lineOfText.split("  ");
 				-------------------- */
 				
-				StringBuffer hashStringBuffer = new StringBuffer();
-				StringBuffer fileNameStringBuffer = new StringBuffer();
+				StringBuilder hashStringBuilder = new StringBuilder();
+				StringBuilder fileNameStringBuilder = new StringBuilder();
 				int i;
 				for(i = 0; i < lineOfText.length(); i++)
 				{
@@ -64,19 +64,19 @@ public class JVerifier
 						break;
 					}
 					
-					hashStringBuffer.append(c);
+					hashStringBuilder.append(c);
 				}
 
-				String hash = hashStringBuffer.toString();
+				String hash = hashStringBuilder.toString();
 				
 				while(i < lineOfText.length())
 				{
 					char c = lineOfText.charAt(i);
-					fileNameStringBuffer.append(c);
+					fileNameStringBuilder.append(c);
 					i++;
 				}
 
-				String fileName = fileNameStringBuffer.toString();
+				String fileName = fileNameStringBuilder.toString();
 				
 				File currentFile = new File(fileName);
 				
@@ -97,7 +97,7 @@ public class JVerifier
 				}
 			}
 			
-			br.close();
+			reader.close();
 			System.out.println("OK: " + okCount + " - Does not match: " + doesNotMatchCount);
 		} 
 		catch(Throwable e)
