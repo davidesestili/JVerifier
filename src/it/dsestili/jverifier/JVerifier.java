@@ -108,7 +108,7 @@ public class JVerifier
 					Core core = new Core(currentFile, param2);
 					String generatedHash = core.generateHash();
 					
-					System.out.print(currentFile.getName() + " ");
+					System.out.print(currentFile.getAbsolutePath() + " ");
 					
 					if(generatedHash.equalsIgnoreCase(hash))
 					{
