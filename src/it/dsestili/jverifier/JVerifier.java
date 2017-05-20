@@ -46,11 +46,13 @@ public class JVerifier
 		if(!file.exists())
 		{
 			System.out.println("File does not exist");
+			return;
 		}
 		
 		if(!file.isFile())
 		{
 			System.out.println("Is not a file");
+			return;
 		}
 		
 		try 
