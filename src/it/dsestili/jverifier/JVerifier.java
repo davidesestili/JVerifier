@@ -29,7 +29,7 @@ public class JVerifier
 
 	public static void main(String[] args) 
 	{
-		if(args.length > 0)
+		if(args.length == 2)
 		{
 			new JVerifier().verify(args[0], args[1]);
 		}
