@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import it.dsestili.jhashcode.core.Core;
 
@@ -61,64 +62,74 @@ public class JVerifier
 			InputStreamReader isr = new InputStreamReader(fis);
 			BufferedReader reader = new BufferedReader(isr);
 			
-			int okCount = 0, doesNotMatchCount = 0;
+			int okCount = 0, doesNotMatchCount = 0, notFoundCount = 0;
+
+			File currentFile = null;
 			
 			String lineOfText;
 			while((lineOfText = reader.readLine()) != null)
 			{
-				/* Versione 1 
-				lineOfText = lineOfText.replace("*", " ");
-				String[] lineSplit = lineOfText.split("  ");
-				-------------------- */
-				
-				StringBuilder hashStringBuilder = new StringBuilder();
-				StringBuilder fileNameStringBuilder = new StringBuilder();
-				int i;
-				for(i = 0; i < lineOfText.length(); i++)
+				try
 				{
-					char c = lineOfText.charAt(i);
+					/* Versione 1 
+					lineOfText = lineOfText.replace("*", " ");
+					String[] lineSplit = lineOfText.split("  ");
+					-------------------- */
 					
-					if(c == ' ')
+					StringBuilder hashStringBuilder = new StringBuilder();
+					StringBuilder fileNameStringBuilder = new StringBuilder();
+					int i;
+					for(i = 0; i < lineOfText.length(); i++)
 					{
-						i += 2;
-						break;
+						char c = lineOfText.charAt(i);
+						
+						if(c == ' ')
+						{
+							i += 2;
+							break;
+						}
+						
+						hashStringBuilder.append(c);
 					}
+
+					String hash = hashStringBuilder.toString();
 					
-					hashStringBuilder.append(c);
-				}
+					while(i < lineOfText.length())
+					{
+						char c = lineOfText.charAt(i);
+						fileNameStringBuilder.append(c);
+						i++;
+					}
 
-				String hash = hashStringBuilder.toString();
-				
-				while(i < lineOfText.length())
-				{
-					char c = lineOfText.charAt(i);
-					fileNameStringBuilder.append(c);
-					i++;
+					String fileName = fileNameStringBuilder.toString();
+					
+					currentFile = new File(fileName);
+					
+					Core core = new Core(currentFile, param2);
+					String generatedHash = core.generateHash();
+					
+					System.out.print(currentFile.getName() + " ");
+					
+					if(generatedHash.equalsIgnoreCase(hash))
+					{
+						System.out.println("OK");
+						okCount++;
+					}
+					else
+					{
+						System.out.println("Does not match");
+						doesNotMatchCount++;
+					}
 				}
-
-				String fileName = fileNameStringBuilder.toString();
-				
-				File currentFile = new File(fileName);
-				
-				Core core = new Core(currentFile, param2);
-				String generatedHash = core.generateHash();
-				
-				System.out.print(currentFile.getName() + " ");
-				
-				if(generatedHash.equalsIgnoreCase(hash))
+				catch(FileNotFoundException e)
 				{
-					System.out.println("OK");
-					okCount++;
-				}
-				else
-				{
-					System.out.println("Does not match");
-					doesNotMatchCount++;
+					System.out.println(currentFile.getName() + " not found");
+					notFoundCount++;
 				}
 			}
 			
 			reader.close();
-			System.out.println("OK: " + okCount + " - Does not match: " + doesNotMatchCount);
+			System.out.println("OK: " + okCount + " - Does not match: " + doesNotMatchCount + " - Not found: " + notFoundCount);
 		} 
 		catch(Throwable e)
 		{
