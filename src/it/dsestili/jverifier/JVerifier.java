@@ -71,11 +71,6 @@ public class JVerifier
 			{
 				try
 				{
-					/* Versione 1 
-					lineOfText = lineOfText.replace("*", " ");
-					String[] lineSplit = lineOfText.split("  ");
-					-------------------- */
-					
 					StringBuilder hashStringBuilder = new StringBuilder();
 					StringBuilder fileNameStringBuilder = new StringBuilder();
 					int i;
