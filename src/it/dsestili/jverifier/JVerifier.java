@@ -71,32 +71,10 @@ public class JVerifier
 			{
 				try
 				{
-					StringBuilder hashStringBuilder = new StringBuilder();
-					StringBuilder fileNameStringBuilder = new StringBuilder();
-					int i;
-					for(i = 0; i < lineOfText.length(); i++)
-					{
-						char c = lineOfText.charAt(i);
-						
-						if(c == ' ')
-						{
-							i += 2;
-							break;
-						}
-						
-						hashStringBuilder.append(c);
-					}
-
-					String hash = hashStringBuilder.toString();
+					String[] hashAndFileName = getHashAndFileName(lineOfText);
 					
-					while(i < lineOfText.length())
-					{
-						char c = lineOfText.charAt(i);
-						fileNameStringBuilder.append(c);
-						i++;
-					}
-
-					String fileName = fileNameStringBuilder.toString();
+					String hash = hashAndFileName[0];
+					String fileName = hashAndFileName[1];
 					
 					currentFile = new File(fileName);
 					
@@ -130,7 +108,42 @@ public class JVerifier
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public static String[] getHashAndFileName(String lineOfText)
+	{
+		String[] hashAndFileName = new String[2];
 		
+		StringBuilder hashStringBuilder = new StringBuilder();
+		StringBuilder fileNameStringBuilder = new StringBuilder();
+
+		int i;
+		
+		for(i = 0; i < lineOfText.length(); i++)
+		{
+			char c = lineOfText.charAt(i);
+			
+			if(c == ' ')
+			{
+				i += 2;
+				break;
+			}
+			
+			hashStringBuilder.append(c);
+		}
+
+		hashAndFileName[0] = hashStringBuilder.toString();
+		
+		while(i < lineOfText.length())
+		{
+			char c = lineOfText.charAt(i);
+			fileNameStringBuilder.append(c);
+			i++;
+		}
+
+		hashAndFileName[1] = fileNameStringBuilder.toString();
+		
+		return hashAndFileName;
 	}
 	
 }
